@@ -15,7 +15,9 @@ function getPrice (){
     return response.json();
   })
     .then(function(data){
-    price.innerHTML = data.bpi[symbol].symbol + data.bpi[symbol].rate;
+    var rate = data.bpi[symbol].rate;
+    rate = rate.substring(0, rate.indexOf(".")); // elimina todo después del punto decimal
+    price.innerHTML = data.bpi[symbol].symbol + rate;
     updTime.innerHTML = new Date().toLocaleString();
     disclaimer.innerText = data.disclaimer;
   });
