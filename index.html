@@ -1,81 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <style>
-          /* CSS para dar estilo a la página */
-          select {
-            font-size: 16px;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            margin-bottom: 20px;
-          }
-    
-          .chart {
-            width: 100%;
-            height: 500px;
-            margin-bottom: 20px;
-          }
-        </style>
-      </head>
-      <body>
-        <h2>Selecciona una criptomoneda:</h2>
-        <select id="crypto-select">
-          <option value="btc">Bitcoin (BTC)</option>
-          <option value="eth">Ethereum (ETH)</option>
-          <option value="xrp">Ripple (XRP)</option>
-          <option value="bch">Bitcoin Cash (BCH)</option>
-          <option value="ltc">Litecoin (LTC)</option>
-        </select>
-        <div id="chart-container"></div>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-        <script>
-          // JavaScript para mostrar el gráfico de velas japonesas
-          const select = document.getElementById("crypto-select");
-          const chartContainer = document.getElementById("chart-container");
-          
-          select.addEventListener("change", function() {
-            const selectedCrypto = this.value;
-            const chart = new Chart(chartContainer, {
-              type: "candlestick",
-              data: {
-                datasets: [
-                  {
-                    label: selectedCrypto,
-                    data: [
-                      {
-                        t: "2022-01-01",
-                        o: 10000,
-                        h: 11000,
-                        l: 9000,
-                        c: 10500
-                      },
-                      {
-                        t: "2022-01-02",
-                        o: 10500,
-                        h: 10900,
-                        l: 9800,
-                        c: 10200
-                      },
-                      // Agrega más datos aquí
-                    ]
-                  }
-                ]
-              },
-              options: {
-                scales: {
-                  xAxes: [
-                    {
-                      type: "time",
-                      time: {
-                        unit: "month"
-                      }
-                    }
-                  ]
-                }
-              }
-            });
-          });
-        </script>
-        </body>
+<html>
+  <head>
+    <title>Últimas 5 transacciones de Bitcoin</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <h1>Últimas 5 transacciones de Bitcoin</h1>
+    <table id="transactions-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Dirección de envío</th>
+          <th>Dirección de recepción</th>
+          <th>Cantidad (BTC)</th>
+        </tr>
+      </thead>
+      <tbody id="transactions-body">
+        <!-- Aquí se agregarán las transacciones -->
+      </tbody>
+    </table>
+    <script>
+      $.getJSON("https://api.blockchair.com/bitcoin/dashboards/transactions?limit=5", function(data) {
+        var transactions = data.data;
+        for (var i = 0; i < transactions.length; i++) {
+          var transaction = transactions[i];
+          var date = new Date(transaction.time * 1000);
+          $("#transactions-body").append(`
+            <tr>
+              <td>${date.toLocaleDateString()}</td>
+              <td>${date.toLocaleTimeString()}</td>
+              <td>${transaction.sender}</td>
+              <td>${transaction.recipient}</td>
+              <td>${transaction.amount / 100000000}</td>
+            </tr>
+          `);
+        }
+      });
+    </script>
+  </body>
 </html>
