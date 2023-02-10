@@ -1,42 +1,22 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <title>Últimas 5 transacciones de Bitcoin</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Live Bitcoin Price</title>
   </head>
   <body>
-    <h1>Últimas 5 transacciones de Bitcoin</h1>
-    <table id="transactions-table">
-      <thead>
-        <tr>
-          <th>Fecha</th>
-          <th>Hora</th>
-          <th>Dirección de envío</th>
-          <th>Dirección de recepción</th>
-          <th>Cantidad (BTC)</th>
-        </tr>
-      </thead>
-      <tbody id="transactions-body">
-        <!-- Aquí se agregarán las transacciones -->
-      </tbody>
-    </table>
-    <script>
-      $.getJSON("https://api.blockchair.com/bitcoin/dashboards/transactions?limit=5", function(data) {
-        var transactions = data.data;
-        for (var i = 0; i < transactions.length; i++) {
-          var transaction = transactions[i];
-          var date = new Date(transaction.time * 1000);
-          $("#transactions-body").append(`
-            <tr>
-              <td>${date.toLocaleDateString()}</td>
-              <td>${date.toLocaleTimeString()}</td>
-              <td>${transaction.sender}</td>
-              <td>${transaction.recipient}</td>
-              <td>${transaction.amount / 100000000}</td>
-            </tr>
-          `);
-        }
-      });
-    </script>
+    <h1>Current Bitcoin Price: <br>
+      <span></span>
+    </h1>
+    <p>Last updated on: 
+      <span id="updTime"></span>
+    </p>
+    <button>Get Latest Price</button>
+    <div>
+      <select name="currency" id="currency">
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="GBP">POUND</option>
+      </select>
+    </div>
+    <div id="disclaimer"></div>
   </body>
 </html>
